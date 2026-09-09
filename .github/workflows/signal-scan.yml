@@ -9,19 +9,58 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 2
+
     steps:
-      - name: Trigger protected signal scan
+      - name: Runner diagnostics
         env:
           SIGNAL_API_URL: ${{ secrets.SIGNAL_API_URL }}
           SIGNAL_SCAN_SECRET: ${{ secrets.SIGNAL_SCAN_SECRET }}
         run: |
-          test -n "$SIGNAL_API_URL" || { echo "Missing SIGNAL_API_URL"; exit 1; }
-          test -n "$SIGNAL_SCAN_SECRET" || { echo "Missing SIGNAL_SCAN_SECRET"; exit 1; }
-          code=$(curl --silent --show-error --location \
+          set -u
+
+          echo "=== EURUSD SIGNAL SCAN DIAGNOSTICS ==="
+          echo "Runner started successfully."
+
+          if [ -n "${SIGNAL_API_URL:-}" ]; then
+            echo "SIGNAL_API_URL: present"
+          else
+            echo "SIGNAL_API_URL: MISSING"
+            exit 1
+          fi
+
+          if [ -n "${SIGNAL_SCAN_SECRET:-}" ]; then
+            echo "SIGNAL_SCAN_SECRET: present"
+          else
+            echo "SIGNAL_SCAN_SECRET: MISSING"
+            exit 1
+          fi
+
+          echo "Calling protected signal scanner..."
+
+          HTTP_CODE=$(curl \
+            --silent \
+            --show-error \
+            --location \
+            --max-time 90 \
+            --connect-timeout 15 \
             --output /tmp/scan-response.json \
             --write-out '%{http_code}' \
             --header "Authorization: Bearer $SIGNAL_SCAN_SECRET" \
             --header 'Cache-Control: no-cache' \
             "$SIGNAL_API_URL/api/live-scan")
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "=== API RESPONSE ==="
           cat /tmp/scan-response.json
-          test "$code" -ge 200 -a "$code" -lt 300
+          echo
+          echo "=== END API RESPONSE ==="
+
+          case "$HTTP_CODE" in
+            2??)
+              echo "Signal scanner returned success."
+              ;;
+            *)
+              echo "Signal scanner returned HTTP $HTTP_CODE."
+              exit 1
+              ;;
+          esac
