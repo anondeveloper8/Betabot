@@ -1,0 +1,27 @@
+name: EURUSD Signal Scan
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Trigger protected signal scan
+        env:
+          SIGNAL_API_URL: ${{ secrets.SIGNAL_API_URL }}
+          SIGNAL_SCAN_SECRET: ${{ secrets.SIGNAL_SCAN_SECRET }}
+        run: |
+          test -n "$SIGNAL_API_URL" || { echo "Missing SIGNAL_API_URL"; exit 1; }
+          test -n "$SIGNAL_SCAN_SECRET" || { echo "Missing SIGNAL_SCAN_SECRET"; exit 1; }
+          code=$(curl --silent --show-error --location \
+            --output /tmp/scan-response.json \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $SIGNAL_SCAN_SECRET" \
+            --header 'Cache-Control: no-cache' \
+            "$SIGNAL_API_URL/api/live-scan")
+          cat /tmp/scan-response.json
+          test "$code" -ge 200 -a "$code" -lt 300

@@ -1,0 +1,42 @@
+{
+  "stage": 119,
+  "status": "FROZEN_INDEPENDENT_REPLAY_COMPLETED",
+  "source": {
+    "instrument": "EURUSD",
+    "priceSide": "BID",
+    "timeframe": "M1",
+    "period": "2026-01-01 through 2026-05-31",
+    "rowsM1": 151907
+  },
+  "dataset": {
+    "m15": 3136,
+    "m15Complete": 3136,
+    "h4": 196,
+    "h4Complete": 196
+  },
+  "frozen": {
+    "thresholdATR": 7.414282863913105,
+    "management": "M0_NO_MANAGEMENT",
+    "minRR": 2,
+    "antiChaseATR": 0.25,
+    "slBufferATR": 0.25
+  },
+  "discovery": {
+    "candidates": 0,
+    "geometryEligible": 0,
+    "riskFiltered": 0
+  },
+  "results": {
+    "completed": 0,
+    "rejected": 0,
+    "totalR": 0,
+    "avgR": 0,
+    "wins": 0,
+    "losses": 0,
+    "winRate": null,
+    "profitFactor": null,
+    "endingEquity": 10000
+  },
+  "trades": [],
+  "hash": "e166447b04a51b6486fc6096624c30c57c71925f4d31076d8dc379ab3bbab2da"
+}

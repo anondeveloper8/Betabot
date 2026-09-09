@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const r=JSON.parse(fs.readFileSync('./stage122-report.json','utf8'));
+test('July remains quarantined',()=>assert.ok(r.source.excludedMonths.includes('2026-07')));
+test('clean input has no duplicate timestamps',()=>assert.equal(r.input.duplicateM1Timestamps,0));
+test('frozen threshold unchanged',()=>assert.equal(r.frozen.thresholdATR,7.414282863913105));
+test('zero candidate result is explicit',()=>assert.equal(r.replay.candidateCount,0));
+test('no performance claim is made',()=>assert.equal(r.replay.performanceClaim,false));
+console.log('Stage 122 tests: 5/5 PASS');

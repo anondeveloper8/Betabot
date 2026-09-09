@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0f">
+<meta name="description" content="EUR/USD strategy signal center">
+<title>FX Signal Center</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="eyebrow">EUR/USD</div>
+    <h1>Signal Center</h1>
+  </div>
+  <div id="connectionPill" class="status-pill stale"><span class="status-dot"></span><span id="connectionText">Connecting</span></div>
+</header>
+
+<section class="card glass hero-card">
+  <div class="card-label">Current decision</div>
+  <div id="heroStatus" class="hero-status wait">WAIT</div>
+  <p id="heroReason" class="hero-reason">No completed scan loaded yet.</p>
+  <div class="meta-row">
+    <span id="lastScan">Last scan —</span>
+    <span id="dataSource">Data —</span>
+  </div>
+</section>
+
+<section id="setupCard" class="card glass" hidden>
+  <div class="card-label">Signal</div>
+  <div class="price-grid">
+    <div><span>Entry</span><strong id="entryPrice">—</strong></div>
+    <div><span>Stop</span><strong id="stopPrice">—</strong></div>
+    <div><span>Target</span><strong id="targetPrice">—</strong></div>
+    <div><span>R:R</span><strong id="rr">—</strong></div>
+  </div>
+  <div id="sizeNote" class="size-note"></div>
+</section>
+
+<section id="checksCard" class="card glass" hidden>
+  <div class="card-label">Why?</div>
+  <div id="checks"></div>
+</section>
+
+<section class="card glass info-card">
+  <div class="info-line"><span>Strategy</span><strong>H4 context → H4 zone → reaction → pullback → BOS</strong></div>
+  <div class="info-line"><span>Execution</span><strong>Manual only</strong></div>
+  <div class="info-line"><span>MT5 EA</span><strong>Not required</strong></div>
+  <div class="info-line"><span>Automation</span><strong>Signal generation only</strong></div>
+</section>
+
+<section class="section-head">
+  <div>
+    <div class="eyebrow">History</div>
+    <h2>Recent scans</h2>
+  </div>
+  <button id="refreshButton" class="refresh-button" type="button">Refresh</button>
+</section>
+<div id="signalFeed"><div class="empty-state">Loading signal history…</div></div>
+
+<div id="toast" class="toast" aria-live="polite"></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(console.error));
+  }
+</script>
+</body>
+</html>

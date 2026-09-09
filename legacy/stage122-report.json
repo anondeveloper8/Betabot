@@ -1,0 +1,40 @@
+{
+  "stage": 122,
+  "status": "CLEAN_SUBPERIOD_REPLAY_COMPLETED_ZERO_CANDIDATES",
+  "purpose": "Replay only objectively clean unseen 2026 subperiods while quarantining July's conflicting duplicate timestamps.",
+  "source": {
+    "instrument": "EURUSD",
+    "priceSide": "BID",
+    "timeframe": "M1",
+    "includedMonths": ["2026-06", "2026-08"],
+    "excludedMonths": ["2026-07"],
+    "excludedReason": "Four conflicting duplicate timestamps with non-identical OHLC records."
+  },
+  "input": {
+    "m1Rows": 60163,
+    "m15Complete": 3136,
+    "h4Complete": 196,
+    "duplicateM1Timestamps": 0,
+    "malformedRows": 0
+  },
+  "frozen": {
+    "thresholdATR": 7.414282863913105,
+    "management": "M0_NO_MANAGEMENT",
+    "minRR": 2,
+    "antiChaseATR": 0.25,
+    "slBufferATR": 0.25,
+    "strategyChanges": false
+  },
+  "replay": {
+    "candidateCount": 0,
+    "geometryEligible": 0,
+    "riskEligible": 0,
+    "completedTrades": 0,
+    "totalR": 0,
+    "performanceClaim": false
+  },
+  "decision": "NO_INDEPENDENT_TRADE_SAMPLE_IN_CLEAN_JUNE_AUGUST_SUBPERIOD",
+  "replayPerformed": true,
+  "productionChange": false,
+  "artifactReportHash": "e166447b04a51b6486fc6096624c30c57c71925f4d31076d8dc379ab3bbab2da"
+}

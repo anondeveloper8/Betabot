@@ -1,0 +1,621 @@
+{
+  "runLabel": "FINAL",
+  "status": "REPLAY_COMPLETED",
+  "generatedAt": "2026-09-08T07:59:26.003Z",
+  "source": {
+    "instrument": "EURUSD",
+    "priceSide": "BID",
+    "timeframe": "M1->M15/H4",
+    "dataFile": "./data.json",
+    "period": "2026-01-01 through 2026-08-28"
+  },
+  "dataset": {
+    "m15": 16375,
+    "m15Complete": 16375,
+    "h4": 1057,
+    "h4Complete": 1057
+  },
+  "frozen": {
+    "thresholdATR": 7.414282863913105,
+    "management": "M0_NO_MANAGEMENT",
+    "minRR": 2,
+    "antiChaseATR": 0.25,
+    "slBufferATR": 0.25
+  },
+  "discovery": {
+    "candidates": 32,
+    "geometryEligible": 32,
+    "riskFiltered": 17
+  },
+  "metrics": {
+    "candidatesProcessed": 32,
+    "tradesCompleted": 2,
+    "tradesRejected": 15,
+    "untestable": 0,
+    "winRate": 0,
+    "wins": 0,
+    "losses": 2,
+    "breakeven": 0,
+    "averageWinR": null,
+    "averageLossR": -1,
+    "expectancyR": -1,
+    "avgR": -1,
+    "totalR": -2,
+    "profitFactor": 0,
+    "maxDrawdownR": 2,
+    "longestLossStreak": 2,
+    "medianR": -1,
+    "p25R": -1,
+    "p75R": -1,
+    "endingEquity": 9801.650000000001,
+    "equityReturn": -0.019834999999999853,
+    "rejectionCounts": {
+      "RR_BELOW_MINIMUM": 11,
+      "ENTRY_TOO_EXTENDED": 9,
+      "NO_TARGET_ZONE": 3
+    }
+  },
+  "trades": [
+    {
+      "setupId": "EURUSD-H4-1767729600000-HIGH-ZONE-D2_ATR_RANGE-21-SELL-INTERACTION-363",
+      "direction": "SELL",
+      "detectorIndex": 372,
+      "riskATR": 3.8415987315016262,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "NO_TARGET_ZONE"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16815",
+        "executionIndex": 373,
+        "timestamp": 1767795300000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.17040"
+      },
+      "target": {
+        "valid": false,
+        "targetPrice": null
+      },
+      "rr": {
+        "valid": false,
+        "rr": null
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1771344000000-HIGH-ZONE-D2_ATR_RANGE-208-SELL-INTERACTION-3227",
+      "direction": "SELL",
+      "detectorIndex": 3231,
+      "riskATR": 6.027344935881434,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.18236",
+        "executionIndex": 3232,
+        "timestamp": 1771405200000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.18588"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.17539"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 1.9801136363636365
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1768377600000-HIGH-ZONE-D2_ATR_RANGE-55-SELL-INTERACTION-1116",
+      "direction": "SELL",
+      "detectorIndex": 4074,
+      "riskATR": 5.368390456788371,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "NO_TARGET_ZONE"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16236",
+        "executionIndex": 4075,
+        "timestamp": 1772509500000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16739"
+      },
+      "target": {
+        "valid": false,
+        "targetPrice": null
+      },
+      "rr": {
+        "valid": false,
+        "rr": null
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1772740800000-HIGH-ZONE-D2_ATR_RANGE-282-SELL-INTERACTION-4380",
+      "direction": "SELL",
+      "detectorIndex": 4418,
+      "riskATR": 5.51516345807458,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "NO_TARGET_ZONE"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.15498",
+        "executionIndex": 4419,
+        "timestamp": 1772988300000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16245"
+      },
+      "target": {
+        "valid": false,
+        "targetPrice": null
+      },
+      "rr": {
+        "valid": false,
+        "rr": null
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1773835200000-LOW-ZONE-D2_ATR_RANGE-336-BUY-INTERACTION-5408",
+      "direction": "BUY",
+      "detectorIndex": 5432,
+      "riskATR": 6.256758311878952,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.15653",
+        "executionIndex": 5433,
+        "timestamp": 1774246500000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.14447"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.16036"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.3175787728026534
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1775505600000-LOW-ZONE-D2_ATR_RANGE-416-BUY-INTERACTION-6487",
+      "direction": "BUY",
+      "detectorIndex": 6498,
+      "riskATR": 6.622454501056686,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.15786",
+        "executionIndex": 6499,
+        "timestamp": 1775558700000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.15217"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.15938"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.2671353251318102
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1777406400000-HIGH-ZONE-D2_ATR_RANGE-516-SELL-INTERACTION-8038",
+      "direction": "SELL",
+      "detectorIndex": 8043,
+      "riskATR": 5.916933734110507,
+      "decision": "TRADE_COMPLETED",
+      "reasons": [],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16811",
+        "executionIndex": 8044,
+        "timestamp": 1777468500000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.17222"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.15438"
+      },
+      "rr": {
+        "valid": true,
+        "rr": 3.340632603406326
+      },
+      "result": {
+        "size": 1.21,
+        "pnlPriceTicks": "-411",
+        "realizedR": -1,
+        "grossMoney": -99.46,
+        "netMoney": -99.46,
+        "exitReason": "STOP_TOUCHED"
+      },
+      "exit": {
+        "index": 8130,
+        "reason": "STOP_TOUCHED",
+        "price": "1.17222",
+        "candle": {
+          "instrument": "EURUSD",
+          "timeframe": "M15",
+          "timestampOpen": 1777545900000,
+          "timestampClose": 1777546800000,
+          "open": "117141",
+          "high": "117333",
+          "low": "117134",
+          "close": "117278",
+          "isComplete": true
+        },
+        "timestamp": 1777545900000
+      }
+    },
+    {
+      "setupId": "EURUSD-H4-1779120000000-HIGH-ZONE-D2_ATR_RANGE-602-SELL-INTERACTION-9875",
+      "direction": "SELL",
+      "detectorIndex": 9918,
+      "riskATR": 4.4282786190103565,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16255",
+        "executionIndex": 9919,
+        "timestamp": 1779879600000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16638"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.16090"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.4308093994778068
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1779768000000-HIGH-ZONE-D2_ATR_RANGE-633-SELL-INTERACTION-9858",
+      "direction": "SELL",
+      "detectorIndex": 9927,
+      "riskATR": 3.1431937624130852,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16234",
+        "executionIndex": 9928,
+        "timestamp": 1779887700000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16470"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.16090"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.6101694915254238
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1780948800000-LOW-ZONE-D2_ATR_RANGE-694-BUY-INTERACTION-10818",
+      "direction": "BUY",
+      "detectorIndex": 10831,
+      "riskATR": 5.000271161349874,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.15476",
+        "executionIndex": 10832,
+        "timestamp": 1781046900000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.15258"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.16317"
+      },
+      "rr": {
+        "valid": true,
+        "rr": 3.8577981651376145
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1782662400000-LOW-ZONE-D2_ATR_RANGE-780-BUY-INTERACTION-12098",
+      "direction": "BUY",
+      "detectorIndex": 12124,
+      "riskATR": 5.6781862064408175,
+      "decision": "TRADE_COMPLETED",
+      "reasons": [],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.14150",
+        "executionIndex": 12125,
+        "timestamp": 1782729000000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.13781"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.15064"
+      },
+      "rr": {
+        "valid": true,
+        "rr": 2.4769647696476964
+      },
+      "result": {
+        "size": 1.34,
+        "pnlPriceTicks": "-369",
+        "realizedR": -1,
+        "grossMoney": -98.89,
+        "netMoney": -98.89,
+        "exitReason": "STOP_TOUCHED"
+      },
+      "exit": {
+        "index": 12309,
+        "reason": "STOP_TOUCHED",
+        "price": "1.13781",
+        "candle": {
+          "instrument": "EURUSD",
+          "timeframe": "M15",
+          "timestampOpen": 1782894600000,
+          "timestampClose": 1782895500000,
+          "open": "113810",
+          "high": "113836",
+          "low": "113689",
+          "close": "113732",
+          "isComplete": true
+        },
+        "timestamp": 1782894600000
+      }
+    },
+    {
+      "setupId": "EURUSD-H4-1783411200000-HIGH-ZONE-D2_ATR_RANGE-820-SELL-INTERACTION-12755",
+      "direction": "SELL",
+      "detectorIndex": 12775,
+      "riskATR": 6.2901488320651024,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.13965",
+        "executionIndex": 12776,
+        "timestamp": 1783487700000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.14440"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.13740"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.47368421052631576
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1784246400000-HIGH-ZONE-D2_ATR_RANGE-867-SELL-INTERACTION-13490",
+      "direction": "SELL",
+      "detectorIndex": 13495,
+      "riskATR": 6.353448193453023,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.14258",
+        "executionIndex": 13496,
+        "timestamp": 1784481300000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.14532"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.13740"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 1.8905109489051095
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1784606400000-HIGH-ZONE-D2_ATR_RANGE-881-SELL-INTERACTION-13715",
+      "direction": "SELL",
+      "detectorIndex": 13739,
+      "riskATR": 6.118527098384959,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.14029",
+        "executionIndex": 13740,
+        "timestamp": 1784700900000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.14297"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.13740"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 1.078358208955224
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1784880000000-LOW-ZONE-D2_ATR_RANGE-900-BUY-INTERACTION-14050",
+      "direction": "BUY",
+      "detectorIndex": 14143,
+      "riskATR": 6.34562969406381,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.13945",
+        "executionIndex": 14144,
+        "timestamp": 1785237300000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.13591"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.13959"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.03954802259887006
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1787774400000-HIGH-ZONE-D2_ATR_RANGE-1047-SELL-INTERACTION-16242",
+      "direction": "SELL",
+      "detectorIndex": 16347,
+      "riskATR": 6.766663963058235,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "ENTRY_TOO_EXTENDED",
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.16115",
+        "executionIndex": 16348,
+        "timestamp": 1787912100000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16613"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.15871"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.4899598393574297
+      },
+      "result": null,
+      "exit": null
+    },
+    {
+      "setupId": "EURUSD-H4-1781481600000-HIGH-ZONE-D2_ATR_RANGE-720-SELL-INTERACTION-15651",
+      "direction": "SELL",
+      "detectorIndex": 16355,
+      "riskATR": 3.7851153522504934,
+      "decision": "NO_TRADE",
+      "reasons": [
+        "RR_BELOW_MINIMUM"
+      ],
+      "entry": {
+        "valid": true,
+        "entryPrice": "1.15900",
+        "executionIndex": 16356,
+        "timestamp": 1787919300000
+      },
+      "stop": {
+        "valid": true,
+        "stopPrice": "1.16249"
+      },
+      "target": {
+        "valid": true,
+        "targetPrice": "1.15871"
+      },
+      "rr": {
+        "valid": false,
+        "rr": 0.0830945558739255
+      },
+      "result": null,
+      "exit": null
+    }
+  ],
+  "hash": "c3b0ad764f9882319d9735aac68c1720df173075769d3beaa91f7cd450e3a385"
+}

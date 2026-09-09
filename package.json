@@ -1,0 +1,11 @@
+{
+  "name": "forex-strategy-engine",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "backtest": "node run-backtest.mjs ./data.json",
+    "verify": "node test-decide.mjs",
+    "build-data": "node build-m15-h4.mjs"
+  }
+}

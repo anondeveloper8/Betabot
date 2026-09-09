@@ -1,0 +1,110 @@
+{
+  "generatedBy": "build-m15-h4.mjs",
+  "assumptions": {
+    "timezone": "UTC (unverified against broker/feed -- see file header)",
+    "duplicatePolicy": "identical-OHLC duplicates silently merged; conflicting-OHLC duplicates cause a hard failure for that month",
+    "emptyBucketPolicy": "omitted, never fabricated"
+  },
+  "months": [
+    {
+      "label": "2026-01",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202601.csv",
+      "rawM1Rows": 30149,
+      "dedupedM1Rows": 30149,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 2016,
+      "h4CandlesBuilt": 131
+    },
+    {
+      "label": "2026-02",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202602.csv",
+      "rawM1Rows": 28703,
+      "dedupedM1Rows": 28703,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 1920,
+      "h4CandlesBuilt": 124
+    },
+    {
+      "label": "2026-03",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202603.csv",
+      "rawM1Rows": 31979,
+      "dedupedM1Rows": 31979,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 2136,
+      "h4CandlesBuilt": 135
+    },
+    {
+      "label": "2026-04",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202604.csv",
+      "rawM1Rows": 31531,
+      "dedupedM1Rows": 31531,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 2111,
+      "h4CandlesBuilt": 136
+    },
+    {
+      "label": "2026-05",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202605.csv",
+      "rawM1Rows": 29545,
+      "dedupedM1Rows": 29545,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 1980,
+      "h4CandlesBuilt": 130
+    },
+    {
+      "label": "2026-06",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202606.csv",
+      "rawM1Rows": 31520,
+      "dedupedM1Rows": 31520,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 2112,
+      "h4CandlesBuilt": 136
+    },
+    {
+      "label": "2026-07",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202607.csv",
+      "rawM1Rows": 32537,
+      "dedupedM1Rows": 32529,
+      "conflictingTimestamps": 4,
+      "conflictingTimestampsDetail": [
+        "2026-07-05T17:31:00.000Z",
+        "2026-07-05T17:32:00.000Z",
+        "2026-07-05T17:34:00.000Z",
+        "2026-07-05T17:35:00.000Z"
+      ],
+      "m15CandlesBuilt": 2180,
+      "h4CandlesBuilt": 141
+    },
+    {
+      "label": "2026-08",
+      "sourceFile": "./raw/DAT_ASCII_EURUSD_M1_202608.csv",
+      "rawM1Rows": 28643,
+      "dedupedM1Rows": 28643,
+      "conflictingTimestamps": 0,
+      "conflictingTimestampsDetail": [],
+      "m15CandlesBuilt": 1920,
+      "h4CandlesBuilt": 124
+    }
+  ],
+  "combined": {
+    "m15Total": 16375,
+    "h4Total": 1057,
+    "distinctH4OpenHoursUTC": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      20
+    ],
+    "allSixH4BucketsPresent": true
+  },
+  "outputFile": "data.json",
+  "outputSha256": "73cf957d1286fedfe359321f68a3489a8487aa3f1d571a773f930ca6344d9d9a"
+}
