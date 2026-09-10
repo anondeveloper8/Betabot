@@ -58,6 +58,10 @@ h2 { font-size: 18px; }
 .section-head { display:flex; justify-content:space-between; align-items:center; margin: 22px 2px 10px; }
 .refresh-button { appearance:none; border:1px solid var(--border); background:rgba(255,255,255,.04); color:var(--text); border-radius:10px; padding:8px 12px; font-weight:600; }
 .refresh-button:active { transform:scale(.98); }
+.notification-row { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.notification-row strong { font-size:13px; }
+.notification-status { color:var(--muted); font-size:11px; line-height:1.45; margin-top:4px; }
+.notification-row .refresh-button { flex:0 0 auto; }
 
 .signal-item { display:flex; gap:12px; padding:14px; margin-bottom:8px; }
 .feed-badge { width:34px; height:34px; flex:0 0 34px; border-radius:10px; display:flex; justify-content:center; align-items:center; font-weight:800; }

@@ -23,8 +23,7 @@
   };
 
   let latestSignals = [];
-  let notificationPermissionAsked = false;
-  let lastRenderedSignalKey = null;
+  let notificationBusy = false;
 
   const $ = (id) => document.getElementById(id);
 
@@ -198,24 +197,113 @@
     }
   }
 
-  async function maybeNotify(signal) {
-    if (!signal || !('Notification' in window) || notificationPermissionAsked) return;
-    notificationPermissionAsked = true;
-    if (Notification.permission === 'default') {
-      try { await Notification.requestPermission(); } catch { return; }
-    }
-    if (Notification.permission !== 'granted' || !navigator.serviceWorker?.ready) return;
-    if (signal.status !== 'BUY' && signal.status !== 'SELL') return;
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      registration.showNotification(`${signal.status} EUR/USD`, {
-        body: `Entry ${fmtPrice(signal.entry_price)} · SL ${fmtPrice(signal.stop_price)} · TP ${fmtPrice(signal.target_price)}`,
-        tag: signal.signal_key
-      });
-    } catch { /* Notification support is optional. */ }
+  function base64ToUint8Array(base64) {
+    const padding = '='.repeat((4 - (base64.length % 4)) % 4);
+    const normalized = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = window.atob(normalized);
+    return Uint8Array.from(raw, (char) => char.charCodeAt(0));
   }
 
+  function pushSupported() {
+    return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  }
+
+  async function getPushConfig() {
+    const response = await fetch(`${API_BASE}/api/push-config`, { cache: 'no-store', headers: { accept: 'application/json' } });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.publicKey) throw new Error(payload.error || 'Push notifications are not configured.');
+    return payload;
+  }
+
+  async function getCurrentPushSubscription() {
+    if (!pushSupported()) return null;
+    const registration = await navigator.serviceWorker.ready;
+    return registration.pushManager.getSubscription();
+  }
+
+  async function refreshNotificationUI() {
+    const button = $('notificationButton');
+    const status = $('notificationStatus');
+    if (!button || !status) return;
+    if (!pushSupported()) {
+      button.hidden = true;
+      status.textContent = 'Phone alerts are not supported by this browser.';
+      return;
+    }
+    button.hidden = false;
+    if (Notification.permission === 'denied') {
+      button.disabled = true;
+      button.textContent = 'Alerts blocked';
+      status.textContent = 'Notifications are blocked in browser settings.';
+      return;
+    }
+    button.disabled = notificationBusy;
+    try {
+      const subscription = await getCurrentPushSubscription();
+      if (subscription) {
+        button.textContent = 'Disable phone alerts';
+        status.textContent = 'Phone alerts are enabled.';
+      } else {
+        button.textContent = 'Enable phone alerts';
+        status.textContent = Notification.permission === 'granted'
+          ? 'Permission granted; alerts are not registered on this device.'
+          : 'Get a phone notification when a new BUY or SELL setup is detected.';
+      }
+    } catch {
+      button.textContent = 'Enable phone alerts';
+      status.textContent = 'Alerts are currently unavailable.';
+    }
+  }
+
+  async function toggleNotifications() {
+    if (notificationBusy) return;
+    notificationBusy = true;
+    refreshNotificationUI();
+    try {
+      if (!pushSupported()) throw new Error('This browser does not support phone push notifications.');
+      const existing = await getCurrentPushSubscription();
+      if (existing) {
+        const response = await fetch(`${API_BASE}/api/unsubscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify({ endpoint: existing.endpoint })
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || 'Could not disable phone alerts.');
+        await existing.unsubscribe();
+        toast('Phone alerts disabled.');
+        return;
+      }
+      const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+      if (permission !== 'granted') throw new Error('Notification permission was not granted.');
+      const { publicKey } = await getPushConfig();
+      const registration = await navigator.serviceWorker.ready;
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64ToUint8Array(publicKey) });
+      }
+      const response = await fetch(`${API_BASE}/api/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify({ subscription: subscription.toJSON ? subscription.toJSON() : subscription })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'Could not register phone alerts.');
+      toast(payload.testNotificationSent ? 'Phone alerts enabled. Test notification sent.' : 'Phone alerts enabled.');
+    } catch (error) {
+      console.error(error);
+      toast(error.message || 'Could not configure phone alerts.');
+    } finally {
+      notificationBusy = false;
+      refreshNotificationUI();
+    }
+  }
+
+
   $('refreshButton').addEventListener('click', loadSignals);
+  $('notificationButton')?.addEventListener('click', toggleNotifications);
   loadSignals();
+  refreshNotificationUI();
   setInterval(loadSignals, POLL_MS);
+  setInterval(refreshNotificationUI, 30_000);
 })();

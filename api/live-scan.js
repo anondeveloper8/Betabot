@@ -8,11 +8,13 @@
 
 import { decideSignals } from './decide.js';
 import { fetchLiveMarketData } from '../src/live/twelvedata.js';
+import webpush from 'web-push';
 
 const SUPABASE_URL = () => process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = () => process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const SCAN_SECRET = () => process.env.SIGNAL_SCAN_SECRET || '';
 const REFERENCE_EQUITY = () => Number(process.env.SIGNAL_REFERENCE_EQUITY || 10000);
+const pushConfigured = () => Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
 
 function fail(message, statusCode = 500, code = 'SCAN_ERROR') {
   const error = new Error(message);
@@ -147,6 +149,58 @@ async function persistSignals(rows) {
   return Array.isArray(payload) ? payload : [];
 }
 
+async function notifyNewSignals(rows) {
+
+const eligible = rows.filter((row) => row.status === 'BUY' || row.status === 'SELL');
+if (!eligible.length) return { configured: pushConfigured(), attempted: 0, sent: 0, removed: 0 };
+if (!pushConfigured()) return { configured: false, attempted: 0, sent: 0, removed: 0 };
+
+const subscriptions = await supabaseRequest('/rest/v1/push_subscriptions?select=id,endpoint,subscription');
+const list = Array.isArray(subscriptions) ? subscriptions : [];
+
+webpush.setVapidDetails(
+  process.env.VAPID_SUBJECT || 'https://betabot-xi.vercel.app',
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
+
+let sent = 0;
+let removed = 0;
+
+for (const stored of list) {
+  if (!stored?.subscription?.endpoint) continue;
+  for (const signal of eligible) {
+    try {
+      await webpush.sendNotification(
+        stored.subscription,
+        JSON.stringify({
+          title: `EUR/USD ${signal.status} setup`,
+          body: `Entry ${Number(signal.entry_price).toFixed(5)} · SL ${Number(signal.stop_price).toFixed(5)} · TP ${Number(signal.target_price).toFixed(5)}${signal.rr != null ? ` · ${Number(signal.rr).toFixed(2)}R` : ''}`,
+          icon: '/pwa-192.png', badge: '/pwa-192.png', tag: signal.signal_key, url: '/'
+        }),
+        { TTL: 300, urgency: 'high' }
+      );
+      sent += 1;
+    } catch (error) {
+      const code = Number(error?.statusCode);
+      if (code === 404 || code === 410) {
+        try {
+          await supabaseRequest(`/rest/v1/push_subscriptions?endpoint=eq.${encodeURIComponent(stored.endpoint)}`, { method: 'DELETE' });
+          removed += 1;
+        } catch (deleteError) {
+          console.error('Failed to remove expired push subscription:', deleteError?.message || deleteError);
+        }
+      } else {
+        console.error('Push delivery failed:', error?.message || error);
+      }
+    }
+  }
+}
+return { configured: true, attempted: list.length * eligible.length, sent, removed };
+
+}
+
+
 export async function runLiveScan() {
   if (!SUPABASE_URL() || !SUPABASE_KEY()) throw fail('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required', 503, 'CONFIG_MISSING');
 
@@ -174,20 +228,31 @@ export async function runLiveScan() {
     executedSetupIds: []
   });
 
-  const rows = buildSignalRows({ market, result });
-  const persisted = await persistSignals(rows);
+const rows = buildSignalRows({ market, result });
 
-  return {
-    ok: true,
+const persisted = await persistSignals(rows);
+
+let notifications = { configured: false, attempted: 0, sent: 0, removed: 0 };
+try {
+  notifications = await notifyNewSignals(persisted);
+} catch (error) {
+  console.error('Push notification subsystem failed:', error?.message || error);
+}
+
+return {
+  ok: true,
     status: rows.some((r) => r.status === 'BUY') ? 'BUY' : rows.some((r) => r.status === 'SELL') ? 'SELL' : 'WAIT',
     inserted: persisted.length,
     alreadyRecorded: persisted.length === 0,
     latestM15TimestampClose: market.latestM15TimestampClose,
     latestM15AgeSeconds: market.latestM15AgeSeconds,
     dataSource: market.dataSource,
-    dataSourcePlan: market.dataSourcePlan,
-    result
-  };
+dataSourcePlan: market.dataSourcePlan,
+
+notifications,
+
+result
+};
 }
 
 export default async function handler(req, res) {

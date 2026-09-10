@@ -7,5 +7,8 @@
     "backtest": "node run-backtest.mjs ./data.json",
     "verify": "node test-decide.mjs",
     "build-data": "node build-m15-h4.mjs"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
   }
 }
