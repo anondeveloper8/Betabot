@@ -24,11 +24,20 @@ function fail(message, statusCode = 500, code = 'SCAN_ERROR') {
 }
 
 function authorized(req) {
-  const configured = SCAN_SECRET();
-  if (!configured) throw fail('SIGNAL_SCAN_SECRET is not configured', 503, 'CONFIG_MISSING');
+  const scanSecret = SCAN_SECRET();
+  const cronSecret = process.env.CRON_SCAN_SECRET || '';
+
+  if (!scanSecret && !cronSecret) {
+    throw fail('No scan authentication secret is configured', 503, 'CONFIG_MISSING');
+  }
+
   const header = req.headers?.authorization || req.headers?.Authorization || '';
-  const provided = header.startsWith('Bearer ') ? header.slice(7) : req.headers?.['x-scan-secret'];
-  return provided === configured;
+  const provided = header.startsWith('Bearer ')
+    ? header.slice(7)
+    : req.headers?.['x-scan-secret'];
+
+  return (scanSecret && provided === scanSecret)
+    || (cronSecret && provided === cronSecret);
 }
 
 async function supabaseRequest(path, { method = 'GET', body = undefined, headers = {} } = {}) {
