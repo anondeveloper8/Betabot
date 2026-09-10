@@ -3,6 +3,7 @@
 
   const API_BASE = (window.SIGNAL_API_URL || '').replace(/\/$/, '');
   const POLL_MS = 60_000;
+  let lastRenderedSignalKey = null;
   const REASON_COPY = {
     H4_CONTEXT_UNCLEAR: 'The bigger H4 structure was not clear enough.',
     ZONE_NOT_VALID: 'The H4 zone was no longer valid.',
