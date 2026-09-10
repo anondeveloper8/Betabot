@@ -301,6 +301,19 @@
   }
 
 
+  async function maybeNotify(signal) {
+    try {
+      if (!signal) return;
+      if (signal.status !== 'BUY' && signal.status !== 'SELL') return;
+
+      // Server-side Web Push is responsible for phone notifications.
+      // The PWA does not create a second notification here.
+      return;
+    } catch (error) {
+      console.error('Notification check error:', error);
+    }
+  }
+
   $('refreshButton').addEventListener('click', loadSignals);
   $('notificationButton')?.addEventListener('click', toggleNotifications);
   loadSignals();
