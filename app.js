@@ -131,7 +131,7 @@
     const evidence = decision?.evidence || {};
     const reasons = new Set(signal?.reason_codes || []);
     const rows = [
-      ['H4 context', evidence.contextState === 'BULLISH' || evidence.contextState === 'BEARISH', evidence.contextState || 'UNKNOWN'],
+      ['H4 context', decision ? (evidence.contextState === 'BULLISH' || evidence.contextState === 'BEARISH') : true, decision ? (evidence.contextState || 'UNKNOWN') : 'n/a — no fresh candidate'],
       ['H4 zone', !reasons.has('ZONE_NOT_VALID'), reasons.has('ZONE_NOT_VALID') ? 'blocked' : 'passed'],
       ['At zone', !reasons.has('NOT_AT_ZONE'), reasons.has('NOT_AT_ZONE') ? 'blocked' : 'passed'],
       ['Pullback', !reasons.has('PULLBACK_NOT_CONFIRMED'), reasons.has('PULLBACK_NOT_CONFIRMED') ? 'blocked' : 'passed'],
