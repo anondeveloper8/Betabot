@@ -66,27 +66,63 @@ function normalizeValue(raw, intervalMs, nowMs) {
 
 async function tdJson(path, params) {
   assertApiKey();
+
   const url = new URL(`${BASE_URL}${path}`);
-  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, String(value));
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, String(value));
+  }
   url.searchParams.set('apikey', process.env.TWELVEDATA_API_KEY);
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 20_000);
+
   try {
-    const response = await fetch(url, { signal: controller.signal, headers: { accept: 'application/json' } });
-    const body = await response.json().catch(() => null);
-    if (!response.ok || !body || body.status === 'error') {
-      throw providerError(body?.message || `Twelve Data request failed (${response.status})`, {
-        statusCode: 502,
-        providerStatus: response.status,
-        providerBody: body
-      });
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' }
+    });
+
+    const rawBody = await response.text();
+    let body = null;
+
+    try {
+      body = rawBody ? JSON.parse(rawBody) : null;
+    } catch {
+      throw providerError(
+        `Twelve Data returned non-JSON response (${response.status})`,
+        {
+          statusCode: 502,
+          providerStatus: response.status,
+          providerBodyPreview: rawBody.slice(0, 500)
+        }
+      );
     }
+
+    if (!response.ok || !body || body.status === 'error') {
+      throw providerError(
+        body?.message || `Twelve Data request failed (${response.status})`,
+        {
+          statusCode: 502,
+          providerStatus: response.status,
+          providerBody: body
+        }
+      );
+    }
+
     return body;
   } catch (error) {
-    if (error.name === 'AbortError') throw providerError('Twelve Data request timed out', { code: 'UPSTREAM_TIMEOUT' });
+    if (error.name === 'AbortError') {
+      throw providerError('Twelve Data request timed out', {
+        code: 'UPSTREAM_TIMEOUT'
+      });
+    }
+
     if (error.statusCode) throw error;
-    throw providerError(`Twelve Data request failed: ${error.message}`, { code: 'UPSTREAM_NETWORK_ERROR' });
+
+    throw providerError(
+      `Twelve Data request failed: ${error.message}`,
+      { code: 'UPSTREAM_NETWORK_ERROR' }
+    );
   } finally {
     clearTimeout(timeout);
   }
