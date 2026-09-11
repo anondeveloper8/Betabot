@@ -199,7 +199,7 @@ async function upsertBars(timeframe, bars) {
     updated_at: new Date().toISOString()
   }));
 
-  await db(CACHE_PATH, {
+  await db(`${CACHE_PATH}?on_conflict=symbol,timeframe,timestamp_open`, {
     method: 'POST',
     body: rows,
     headers: {
