@@ -60,67 +60,107 @@ async function db(
 ) {
   const { url, key } = config();
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const maxAttempts = 3;
+  const retryableStatuses = new Set([502, 503, 504]);
 
-  try {
-    const response = await fetch(`${url}${path}`, {
-      method,
-      signal: controller.signal,
-      headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-        ...headers
-      },
-      body: body === undefined ? undefined : JSON.stringify(body)
-    });
-
-    const text = await response.text();
-
-    let payload = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      timeoutMs
+    );
 
     try {
-      payload = text ? JSON.parse(text) : null;
-    } catch {
-      payload = text;
-    }
+      const response = await fetch(`${url}${path}`, {
+        method,
+        signal: controller.signal,
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          'Content-Type': 'application/json',
+          ...headers
+        },
+        body:
+          body === undefined
+            ? undefined
+            : JSON.stringify(body)
+      });
 
-    if (!response.ok) {
+      const text = await response.text();
+
+      let payload = null;
+
+      try {
+        payload = text ? JSON.parse(text) : null;
+      } catch {
+        payload = text;
+      }
+
+      if (!response.ok) {
+        const shouldRetry =
+          retryableStatuses.has(response.status) &&
+          attempt < maxAttempts;
+
+        if (shouldRetry) {
+          const delayMs =
+            attempt === 1 ? 500 : 1500;
+
+          await new Promise((resolve) =>
+            setTimeout(resolve, delayMs)
+          );
+
+          continue;
+        }
+
+        throw cacheError(
+          `Supabase cache request failed (${response.status})`,
+          {
+            statusCode: 502,
+            code: 'CACHE_DATABASE_ERROR',
+            databaseStatus: response.status,
+            databaseBody: payload,
+            attempts: attempt
+          }
+        );
+      }
+
+      return {
+        payload,
+        headers: response.headers
+      };
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        throw cacheError(
+          'Supabase cache request timed out',
+          {
+            code: 'CACHE_DATABASE_TIMEOUT',
+            attempts: attempt
+          }
+        );
+      }
+
+      if (error.statusCode) {
+        throw error;
+      }
+
       throw cacheError(
-        `Supabase cache request failed (${response.status})`,
+        `Supabase cache request failed: ${error.message}`,
         {
-          statusCode: 502,
-          code: 'CACHE_DATABASE_ERROR',
-          databaseStatus: response.status,
-          databaseBody: payload
+          code: 'CACHE_DATABASE_NETWORK_ERROR',
+          attempts: attempt
         }
       );
+    } finally {
+      clearTimeout(timeout);
     }
-
-    return {
-      payload,
-      headers: response.headers
-    };
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      throw cacheError(
-        'Supabase cache request timed out',
-        { code: 'CACHE_DATABASE_TIMEOUT' }
-      );
-    }
-
-    if (error.statusCode) {
-      throw error;
-    }
-
-    throw cacheError(
-      `Supabase cache request failed: ${error.message}`,
-      { code: 'CACHE_DATABASE_NETWORK_ERROR' }
-    );
-  } finally {
-    clearTimeout(timeout);
   }
+
+  throw cacheError(
+    'Supabase cache request exhausted retries',
+    {
+      code: 'CACHE_DATABASE_ERROR'
+    }
+  );
 }
 
 function normalizeCachedBar(row) {
